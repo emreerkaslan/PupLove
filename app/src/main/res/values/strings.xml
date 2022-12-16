@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PupLove</string>
+    <string name="breed_detail">Breed</string>
+    <string name="favorites_title">Favorites</string>
+
+    <string name="breed">Breed: %1s</string>
+    <string name="filtered">Filtered: %1s</string>
+    <string name="filter_favorites">Filter Favorites</string>
+</resources>

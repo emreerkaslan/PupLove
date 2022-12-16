@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigation_splash">
+
+    <fragment
+        android:id="@+id/navigation_splash"
+        android:name="com.erkaslan.puplove.ui.splash.SplashFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_navigation_splash_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/navigation_splash" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.erkaslan.puplove.ui.home.HomeFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_home" >
+
+        <action
+            android:id="@+id/action_navigation_home_to_detail"
+            app:destination="@id/navigation_detail" />
+
+        <action
+            android:id="@+id/action_navigation_home_to_favorites"
+            app:destination="@id/navigation_favorites" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_detail"
+        android:name="com.erkaslan.puplove.ui.detail.DogBreedDetailFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_detail">
+        <action
+            android:id="@+id/action_navigation_detail_to_favorites"
+            app:destination="@id/navigation_favorites" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_favorites"
+        android:name="com.erkaslan.puplove.ui.favorites.FavoritesFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_favorites"/>
+</navigation>

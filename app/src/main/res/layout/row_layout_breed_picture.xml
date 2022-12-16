@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="dogEntity"
+            type="com.erkaslan.puplove.data.models.DogEntity" />
+
+        <variable
+            name="breedName"
+            type="String" />
+
+        <variable
+            name="favorited"
+            type="Boolean" />
+
+        <variable
+            name="showDescription"
+            type="Boolean" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_picture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_50"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:imageUrl="@{dogEntity.pictureUri}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_50"
+            android:layout_marginEnd="@dimen/margin_50"
+            android:layout_marginBottom="@dimen/margin_100"
+            android:src="@{favorited ? @drawable/ic_favorited : @drawable/ic_unfavorited}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_picture" />
+
+        <TextView
+            android:id="@+id/tv_dog_subbreed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_50"
+            android:layout_marginTop="@dimen/margin_50"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{breedName }"
+            android:textAlignment="textStart"
+            android:textSize="@dimen/font_size_160"
+            android:textColor="@color/pup_purple"
+            android:textStyle="bold"
+            android:visibility="@{showDescription ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_picture" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

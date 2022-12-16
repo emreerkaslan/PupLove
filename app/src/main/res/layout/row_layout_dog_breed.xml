@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="dogBreedName"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_150"
+        android:layout_marginHorizontal="@dimen/margin_100"
+        android:layout_marginVertical="@dimen/margin_25"
+        android:background="@drawable/bg_cherry_blossom_witdh_2dp_radius_10dp">
+
+        <TextView
+            android:id="@+id/tv_dog_breed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{dogBreedName}"
+            android:textAlignment="textStart"
+            android:textSize="@dimen/font_size_160"
+            android:layout_marginStart="@dimen/margin_100"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

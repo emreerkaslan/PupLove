@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_home_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.home.HomeFragment">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/cv_header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/homepage_header_height"
+            android:layout_marginVertical="@dimen/margin_50"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_logo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:contentDescription="@string/app_name"
+                android:paddingVertical="@dimen/margin_25"
+                android:paddingStart="@dimen/margin_50"
+                android:scaleType="fitStart"
+                android:src="@drawable/ic_pup_love_logo_bg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_favorite_navigation"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:contentDescription="@string/app_name"
+                android:paddingVertical="@dimen/margin_25"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_favorited"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_logo"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_dog_breed"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cv_header"
+            tools:listitem="@layout/row_layout_dog_breed" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
