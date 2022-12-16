@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
     <uses-permission
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         android:minSdkVersion="30" />
@@ -35,10 +34,5 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <provider
-            android:name=".DogBreedContentProvider"
-            android:authorities="com.erkaslan.puplove.dogbreedcontentprovider"
-            android:exported="false"
-            android:grantUriPermissions="true" />
     </application>
 </manifest>

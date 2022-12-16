@@ -6,4 +6,7 @@
     <string name="breed">Breed: %1s</string>
     <string name="filtered">Filtered: %1s</string>
     <string name="filter_favorites">Filter Favorites</string>
+
+    <string name="error_create">Image can\'t be saved to storage</string>
+    <string name="error_delete">Image can\'t be deleted</string>
 </resources>

@@ -21,8 +21,8 @@ class HomeViewModel @Inject constructor() : ViewModel() {
 
     private fun getBreedList() {
         viewModelScope.launch {
-            ApiClient.shared.getAllBreeds { breedList, throwable ->
-               _viewState.update { it.copy(dogBreedList = breedList) }
+            ApiClient.shared.getAllBreeds { breedList, _ ->
+                _viewState.update { it.copy(dogBreedList = breedList ?: listOf()) }
             }
         }
     }

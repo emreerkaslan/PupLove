@@ -59,14 +59,16 @@ class ApiClient {
 
     fun getAllBreeds(completion: (breedList: List<String>?, Throwable?) -> Unit) {
         enqueueRequest(dogBreedService?.getAllBreeds()) { data, _, error ->
-            val list = data?.get("message") as JsonObject
-            if (list.size() != 0) {
-                val finalBreedList = mutableListOf<String>()
-                list.keySet().forEach { breed ->
-                    finalBreedList.add(breed.replaceFirstChar { it.uppercase() })
+            data?.let {
+                val list = data.get("message") as JsonObject
+                if (list.size() != 0) {
+                    val finalBreedList = mutableListOf<String>()
+                    list.keySet().forEach { breed ->
+                        finalBreedList.add(breed.replaceFirstChar { it.uppercase() })
+                    }
+                    completion(finalBreedList, error)
                 }
-                completion(finalBreedList, error)
-            }
+            } ?: completion(null, error)
         }
     }
 

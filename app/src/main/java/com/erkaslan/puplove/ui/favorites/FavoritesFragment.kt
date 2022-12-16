@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -18,6 +19,7 @@ import com.erkaslan.puplove.databinding.FragmentFavoritesBinding
 import com.erkaslan.puplove.ui.detail.DogBreedPictureListAdapter
 import com.erkaslan.puplove.ui.detail.FavoriteListener
 import com.erkaslan.puplove.util.Constants
+import com.erkaslan.puplove.util.FileUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -97,5 +99,14 @@ class FavoritesFragment : Fragment(), FavoriteListener {
         dialog.show()
     }
 
-    override fun onFavoriteClick(dogEntity: DogEntity) { viewModel.unfavorite(dogEntity) }
+    override fun onFavoriteClick(dogEntity: DogEntity) {
+        if (FileUtils.deleteImageFile(dogEntity.filePath)) viewModel.unfavorite(dogEntity)
+        else showErrorMessage()
+    }
+
+    private fun showErrorMessage() {
+        activity?.runOnUiThread {
+            Toast.makeText(requireContext(), resources.getString(R.string.error_delete), Toast.LENGTH_SHORT).show()
+        }
+    }
 }

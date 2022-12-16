@@ -91,7 +91,7 @@ class DogBreedDetailFragment : Fragment(), FavoriteListener {
                 handleFavoriteStatusChange(FileUtils.deleteImageFile(dogEntity.filePath), dogEntity)
             } else {
                 dogEntity.pictureUri.let { uri ->
-                    FileUtils.createImageFile(activity as MainActivity, uri) { success, filePath ->
+                    FileUtils.createImageFile(requireContext(), uri) { success, filePath ->
                         handleFavoriteStatusChange(success, dogEntity, filePath)
                     }
                 }
@@ -101,13 +101,13 @@ class DogBreedDetailFragment : Fragment(), FavoriteListener {
     }
 
     private fun handleFavoriteStatusChange(success: Boolean, dogEntity: DogEntity, filePath: String? = null) {
-        //if (!success) showErrorMessage()
+        if (!success) showErrorMessage(dogEntity.favorited)
         viewModel.changeFavoriteStatus(dogEntity.pictureUri, filePath)
     }
 
-    private fun showErrorMessage() {
+    private fun showErrorMessage(favoriteStatus: Boolean) {
         activity?.runOnUiThread {
-            Toast.makeText(requireContext(), "Image is not saved to storage", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), resources.getString(if (favoriteStatus) R.string.error_delete else R.string.error_create), Toast.LENGTH_SHORT).show()
         }
     }
 }
