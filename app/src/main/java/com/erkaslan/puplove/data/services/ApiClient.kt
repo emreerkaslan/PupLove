@@ -35,6 +35,8 @@ class ApiClient {
     }
 
     companion object {
+        private const val UNSUCCESSFUL_REQUEST = "Request is unsuccessful"
+        private const val MESSAGE = "message"
         val shared = ApiClient()
 
         private fun <T> enqueueRequest(
@@ -50,7 +52,7 @@ class ApiClient {
                     if (response.code() in 200..299) {
                         completion(response.body(), null)
                     } else {
-                        completion(null, Throwable(message = "Request is unsuccessful"))
+                        completion(null, Throwable(message = UNSUCCESSFUL_REQUEST))
                     }
                 }
             })
@@ -62,7 +64,7 @@ class ApiClient {
             error?.let {
                 completion(null, error)
             } ?: data?.let {
-                val list = data.get("message") as JsonObject
+                val list = data.get(MESSAGE) as JsonObject
                 if (list.size() != 0) {
                     val finalBreedList = mutableListOf<String>()
                     list.keySet().forEach { breed ->
@@ -82,7 +84,7 @@ class ApiClient {
             error?.let {
                 completion(null, error)
             } ?: data?.let {
-                val list = data.get("message") as? JsonArray
+                val list = data.get(MESSAGE) as? JsonArray
                 if (list != null && list.size() != 0) {
                     val finalPictureList = mutableListOf<String>()
                     list.forEach { pictureUri -> finalPictureList.add(pictureUri.asString) }

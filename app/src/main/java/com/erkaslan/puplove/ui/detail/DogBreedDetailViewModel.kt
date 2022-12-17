@@ -2,9 +2,9 @@ package com.erkaslan.puplove.ui.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.erkaslan.puplove.data.db.DogEntityDao
 import com.erkaslan.puplove.data.models.DogEntity
-import com.erkaslan.puplove.data.services.ApiClient
+import com.erkaslan.puplove.data.repository.DogBreedRepository
+import com.erkaslan.puplove.util.Result
 import com.erkaslan.puplove.ui.home.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -14,32 +14,26 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class DogBreedDetailViewModel @Inject constructor(private val dogEntityDao: DogEntityDao) : ViewModel() {
+class DogBreedDetailViewModel @Inject constructor(private val dogBreedRepository: DogBreedRepository,) : ViewModel() {
     private var _viewState = MutableStateFlow(DetailViewState())
     val viewState: StateFlow<DetailViewState> = _viewState
 
     companion object {
         private const val PAGE_BUFFER = 5
-        private const val PAGE_SIZE = 10
+        private const val PAGE_SIZE = 20
     }
 
     fun getPictures(breedName: String) {
         viewModelScope.launch {
-            ApiClient.shared.getBreedPictures(breedName) { pictureList, throwable ->
-                throwable?.let {
-                    sendUiEvent(UiEvent.ShowError(throwable.message ?: ""))
+            when (val response = dogBreedRepository.getBreedPictures(breedName)) {
+                is Result.Success -> {
+                    val finalList = response.data
+                    val pagedList = finalList.take(PAGE_SIZE)
+                    _viewState.update { it.copy(breedAllPictureList = finalList, pagedPictureList = pagedList, lastItemIndex = pagedList.size) }
+                }
+                is Result.Failed -> {
+                    sendUiEvent(UiEvent.ShowError(response.exception?.message ?: ""))
                     _viewState.update { it.copy(pagedPictureList = listOf()) }
-                } ?: pictureList?.let {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val allFavorites = dogEntityDao.getAll()
-                        val finalList = pictureList.map { uri ->
-                            if (uri in allFavorites.map { it.pictureUri }) allFavorites.first { it.pictureUri == uri }
-                            else DogEntity(pictureUri = uri, breedName = breedName, favorited = false)
-                        }
-                        val pagedList = finalList.take(PAGE_SIZE)
-                        _viewState.update { it.copy(breedAllPictureList = finalList, pagedPictureList = pagedList, lastItemIndex = pagedList.size) }
-                        cancel()
-                    }
                 }
             }
         }
@@ -59,14 +53,7 @@ class DogBreedDetailViewModel @Inject constructor(private val dogEntityDao: DogE
                 newList[newList.indexOf(entity)] = newEntity
 
                 _viewState.update { DetailViewState(breedAllPictureList = newList) }
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    if (entity.favorited) {
-                        dogEntityDao.upsert(entity)
-                    } else {
-                        dogEntityDao.delete(entity)
-                    }
-                }
+                dogBreedRepository.updateFavoriteStatus(entity)
             }
         }
     }

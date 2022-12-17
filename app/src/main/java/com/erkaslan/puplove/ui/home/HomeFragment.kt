@@ -42,6 +42,7 @@ class HomeFragment : Fragment(), DogBreedListener {
 
     override fun onResume() {
         super.onResume()
+        if (viewModel.viewState.value.dogBreedList?.toMutableList().isNullOrEmpty()) viewModel.getBreedList()
         requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
                 if (isEnabled) requireActivity().finishAffinity()
