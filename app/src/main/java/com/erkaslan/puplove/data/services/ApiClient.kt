@@ -39,18 +39,18 @@ class ApiClient {
 
         private fun <T> enqueueRequest(
             call: Call<T>?,
-            completion: (T?, Response<T>?, Throwable?) -> Unit
+            completion: (T?, Throwable?) -> Unit
         ) {
             call?.enqueue(object : Callback<T> {
                 override fun onFailure(call: Call<T>, t: Throwable) {
-                    completion(null, null, t)
+                    completion(null, t)
                 }
 
                 override fun onResponse(call: Call<T>, response: Response<T>) {
                     if (response.code() in 200..299) {
-                        completion(response.body(), response, null)
+                        completion(response.body(), null)
                     } else {
-                        completion(null, response, Exception())
+                        completion(null, Throwable(message = "Request is unsuccessful"))
                     }
                 }
             })
@@ -58,17 +58,19 @@ class ApiClient {
     }
 
     fun getAllBreeds(completion: (breedList: List<String>?, Throwable?) -> Unit) {
-        enqueueRequest(dogBreedService?.getAllBreeds()) { data, _, error ->
-            data?.let {
+        enqueueRequest(dogBreedService?.getAllBreeds()) { data, error ->
+            error?.let {
+                completion(null, error)
+            } ?: data?.let {
                 val list = data.get("message") as JsonObject
                 if (list.size() != 0) {
                     val finalBreedList = mutableListOf<String>()
                     list.keySet().forEach { breed ->
                         finalBreedList.add(breed.replaceFirstChar { it.uppercase() })
                     }
-                    completion(finalBreedList, error)
+                    completion(finalBreedList, null)
                 }
-            } ?: completion(null, error)
+            } ?: completion(null, null)
         }
     }
 
@@ -76,13 +78,17 @@ class ApiClient {
         breed: String,
         completion: (breedPictureList: List<String>?, Throwable?) -> Unit
     ) {
-        enqueueRequest(dogBreedService?.getBreedPictures(breed)) { data, _, error ->
-            val list = data?.get("message") as? JsonArray
-            if (list != null && list.size() != 0) {
-                val finalPictureList = mutableListOf<String>()
-                list.forEach { pictureUri -> finalPictureList.add(pictureUri.asString) }
-                completion(finalPictureList, error)
-            }
+        enqueueRequest(dogBreedService?.getBreedPictures(breed)) { data, error ->
+            error?.let {
+                completion(null, error)
+            } ?: data?.let {
+                val list = data.get("message") as? JsonArray
+                if (list != null && list.size() != 0) {
+                    val finalPictureList = mutableListOf<String>()
+                    list.forEach { pictureUri -> finalPictureList.add(pictureUri.asString) }
+                    completion(finalPictureList, null)
+                }
+            } ?: completion(null, null)
         }
     }
 }

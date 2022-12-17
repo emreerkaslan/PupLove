@@ -38,7 +38,7 @@ object FileUtils {
             })
     }
 
-    fun saveImageFile(bitmap: Bitmap, completion: (success: Boolean, filePath: String?) -> Unit) {
+    private fun saveImageFile(bitmap: Bitmap, completion: (success: Boolean, filePath: String?) -> Unit) {
         val savedImagePath: String
         val imageFileName = System.currentTimeMillis().toString() + ".jpg"
         val storageDir = File(

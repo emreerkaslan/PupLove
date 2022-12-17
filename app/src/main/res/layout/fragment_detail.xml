@@ -8,6 +8,10 @@
         <variable
             name="breedName"
             type="String" />
+
+        <variable
+            name="errorText"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,70 +20,95 @@
         android:layout_height="match_parent"
         tools:context=".ui.detail.DetailFragment">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/cv_detail_header"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_detail_main"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/homepage_header_height"
-            android:layout_marginVertical="@dimen/margin_50"
-            android:orientation="horizontal"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/iv_detail_back"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:contentDescription="@string/app_name"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_back"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_header"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:text="@{@string/breed(breedName)}"
-                android:textColor="@color/pup_purple"
-                android:textSize="@dimen/font_size_240"
-                android:textStyle="bold"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/cv_detail_header"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/homepage_header_height"
+                android:layout_marginVertical="@dimen/margin_50"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/iv_detail_back" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/iv_favorite_navigation"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:contentDescription="@string/app_name"
-                android:paddingVertical="@dimen/margin_25"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_favorited"
+                <ImageView
+                    android:id="@+id/iv_detail_back"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_back"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_header"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="@{@string/breed(breedName)}"
+                    android:textColor="@color/pup_purple"
+                    android:textSize="@dimen/font_size_240"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iv_detail_back" />
+
+                <ImageView
+                    android:id="@+id/iv_favorite_navigation"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/app_name"
+                    android:paddingVertical="@dimen/margin_25"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_favorited"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_header"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_breed_pictures"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/margin_100"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tv_header"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cv_detail_header"
+                tools:listitem="@layout/row_layout_breed_picture" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_breed_pictures"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/margin_100"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_detail_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{errorText}"
+            android:textColor="@color/graphite"
+            android:textSize="@dimen/font_size_160"
+            android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cv_detail_header"
-            tools:listitem="@layout/row_layout_breed_picture" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

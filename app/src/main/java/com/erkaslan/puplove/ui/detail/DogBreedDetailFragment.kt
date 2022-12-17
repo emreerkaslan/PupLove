@@ -13,10 +13,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.erkaslan.puplove.MainActivity
 import com.erkaslan.puplove.R
 import com.erkaslan.puplove.data.models.DogEntity
 import com.erkaslan.puplove.databinding.FragmentDetailBinding
+import com.erkaslan.puplove.ui.adapter.DogBreedPictureListAdapter
+import com.erkaslan.puplove.ui.adapter.FavoriteListener
+import com.erkaslan.puplove.ui.home.UiEvent
 import com.erkaslan.puplove.util.Constants
 import com.erkaslan.puplove.util.FileUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,7 +75,22 @@ class DogBreedDetailFragment : Fragment(), FavoriteListener {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect {
                     it.pagedPictureList?.let { list ->
-                        (binding.rvBreedPictures.adapter as DogBreedPictureListAdapter).submitList(list)
+                        if (list.isEmpty()) {
+                            binding.errorText = resources.getString(R.string.error_connection)
+                            binding.tvDetailEmpty.visibility = View.VISIBLE
+                        } else {
+                            binding.tvDetailEmpty.visibility = View.GONE
+                            (binding.rvBreedPictures.adapter as DogBreedPictureListAdapter).submitList(list)
+                        }
+                    }
+                    it.uiEventList?.firstOrNull()?.let {
+                        when (it) {
+                            is UiEvent.ShowError -> {
+                                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                            }
+                            else -> {}
+                        }
+                        viewModel.consumeUiEvent()
                     }
                 }
             }

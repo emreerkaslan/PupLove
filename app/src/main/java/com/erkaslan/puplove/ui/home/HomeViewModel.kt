@@ -21,11 +21,16 @@ class HomeViewModel @Inject constructor() : ViewModel() {
 
     private fun getBreedList() {
         viewModelScope.launch {
-            ApiClient.shared.getAllBreeds { breedList, _ ->
-                _viewState.update { it.copy(dogBreedList = breedList ?: listOf()) }
+            ApiClient.shared.getAllBreeds { breedList, error ->
+                _viewState.update { it.copy(dogBreedList = error?.let { listOf() } ?: breedList) }
             }
         }
     }
 }
 
 data class HomeViewState(val dogBreedList: List<String>? = null)
+
+sealed class UiEvent {
+    data class ShowError(val message: String) : UiEvent()
+    object ScrollBeginningEvent : UiEvent()
+}

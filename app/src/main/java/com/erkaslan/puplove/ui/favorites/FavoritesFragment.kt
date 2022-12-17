@@ -16,8 +16,9 @@ import androidx.navigation.fragment.findNavController
 import com.erkaslan.puplove.R
 import com.erkaslan.puplove.data.models.DogEntity
 import com.erkaslan.puplove.databinding.FragmentFavoritesBinding
-import com.erkaslan.puplove.ui.detail.DogBreedPictureListAdapter
-import com.erkaslan.puplove.ui.detail.FavoriteListener
+import com.erkaslan.puplove.ui.adapter.DogBreedPictureListAdapter
+import com.erkaslan.puplove.ui.adapter.FavoriteListener
+import com.erkaslan.puplove.ui.home.UiEvent
 import com.erkaslan.puplove.util.Constants
 import com.erkaslan.puplove.util.FileUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,6 +66,12 @@ class FavoritesFragment : Fragment(), FavoriteListener {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect {
                     it.filteredList?.let { list ->
+                        if (list.isEmpty()) {
+                            binding.errorText = resources.getString(R.string.no_items)
+                            binding.tvFavoritesEmpty.visibility = View.VISIBLE
+                        } else {
+                            binding.tvFavoritesEmpty.visibility = View.GONE
+                        }
                         (binding.rvFavoritesPictures.adapter as DogBreedPictureListAdapter).submitList(list)
                     }
                     it.currentFilter.let {
@@ -75,6 +82,9 @@ class FavoritesFragment : Fragment(), FavoriteListener {
                             is UiEvent.ScrollBeginningEvent -> {
                                 delay(SCROLL_DELAY)
                                 binding.rvFavoritesPictures.layoutManager?.scrollToPosition(0)
+                            }
+                            is UiEvent.ShowError -> {
+                                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                             }
                         }
                         viewModel.consumeUiEvent()

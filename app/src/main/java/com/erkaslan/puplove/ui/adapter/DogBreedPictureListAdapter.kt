@@ -1,4 +1,4 @@
-package com.erkaslan.puplove.ui.detail
+package com.erkaslan.puplove.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

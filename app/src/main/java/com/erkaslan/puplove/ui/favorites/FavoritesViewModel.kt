@@ -3,6 +3,7 @@ package com.erkaslan.puplove.ui.favorites
 import androidx.lifecycle.ViewModel
 import com.erkaslan.puplove.data.db.DogEntityDao
 import com.erkaslan.puplove.data.models.DogEntity
+import com.erkaslan.puplove.ui.home.UiEvent
 import com.erkaslan.puplove.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -84,7 +85,3 @@ data class DetailViewState(
     val currentFilter: String = Constants.ALL,
     val uiEventList: List<UiEvent>? = listOf()
 )
-
-sealed class UiEvent {
-    object ScrollBeginningEvent : UiEvent()
-}

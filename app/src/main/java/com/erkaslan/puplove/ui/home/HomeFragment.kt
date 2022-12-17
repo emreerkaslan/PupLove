@@ -14,6 +14,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.erkaslan.puplove.R
 import com.erkaslan.puplove.databinding.FragmentHomeBinding
+import com.erkaslan.puplove.ui.adapter.DogBreedListAdapter
+import com.erkaslan.puplove.ui.adapter.DogBreedListener
 import com.erkaslan.puplove.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -59,7 +61,13 @@ class HomeFragment : Fragment(), DogBreedListener {
             viewModel.viewState.collect {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     it.dogBreedList?.let { list ->
-                        (binding.rvDogBreed.adapter as DogBreedListAdapter).submitList(list)
+                        if (list.isEmpty()) {
+                            binding.errorText = resources.getString(R.string.error_connection)
+                            binding.tvHomeEmpty.visibility = View.VISIBLE
+                        } else {
+                            binding.tvHomeEmpty.visibility = View.GONE
+                            (binding.rvDogBreed.adapter as DogBreedListAdapter).submitList(list)
+                        }
                     }
                 }
             }
