@@ -25,7 +25,7 @@ object DataBindingUtils {
             else imageUrl
         } ?: imageUrl
 
-        Glide.with(imageView.context).load(loadSource)
+        Glide.with(imageView.context).asBitmap().load(loadSource)
             .placeholder(R.drawable.ic_dog_loading_placeholder)
             .error(R.drawable.ic_dog_loading_placeholder)
             .into(imageView)

@@ -63,7 +63,7 @@ class FavoritesFragment : Fragment(), FavoriteListener {
 
     private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect {
                     it.filteredList?.let { list ->
                         if (list.isEmpty()) {
@@ -110,8 +110,8 @@ class FavoritesFragment : Fragment(), FavoriteListener {
     }
 
     override fun onFavoriteClick(dogEntity: DogEntity) {
-        if (FileUtils.deleteImageFile(dogEntity.filePath)) viewModel.unfavorite(dogEntity)
-        else showErrorMessage()
+        if (!FileUtils.deleteImageFile(dogEntity.filePath)) showErrorMessage()
+        viewModel.unfavorite(dogEntity)
     }
 
     private fun showErrorMessage() {

@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.erkaslan.puplove.R
 import com.erkaslan.puplove.databinding.FragmentSplashBinding
@@ -36,10 +38,16 @@ class SplashFragment: Fragment() {
 
     private fun initObserver() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.viewState.collect {
-                it.dogBreedList?.let {
-                    if (it.isEmpty()) Toast.makeText(requireContext(), resources.getString(R.string.error_connection), Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_navigation_splash_to_navigation_home)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.viewState.collect {
+                    it.dogBreedList?.let {
+                        if (it.isEmpty()) Toast.makeText(
+                            requireContext(),
+                            resources.getString(R.string.error_connection),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        findNavController().navigate(R.id.action_navigation_splash_to_navigation_home)
+                    }
                 }
             }
         }

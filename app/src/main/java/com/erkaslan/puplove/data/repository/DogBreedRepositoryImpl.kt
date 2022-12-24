@@ -57,4 +57,18 @@ class DogBreedRepositoryImpl @Inject constructor(private val dogEntityDao: DogEn
             }
         }
     }
+
+    override suspend fun getAllFavorites(): List<DogEntity> = suspendCoroutine { continuation ->
+        CoroutineScope(Dispatchers.IO).launch {
+            val favorites = dogEntityDao.getAllFavorites().reversed()
+            continuation.resume(favorites)
+        }
+    }
+
+    override suspend fun deleteFavorite(dogEntity: DogEntity) = suspendCoroutine { continuation ->
+        CoroutineScope(Dispatchers.IO).launch {
+            dogEntityDao.delete(dogEntity)
+            continuation.resume(Unit)
+        }
+    }
 }

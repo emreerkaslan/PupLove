@@ -72,7 +72,7 @@ class DogBreedDetailFragment : Fragment(), FavoriteListener {
 
     private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect {
                     it.pagedPictureList?.let { list ->
                         if (list.isEmpty()) {

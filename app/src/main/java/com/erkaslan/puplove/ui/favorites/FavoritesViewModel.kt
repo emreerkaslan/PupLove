@@ -1,8 +1,8 @@
 package com.erkaslan.puplove.ui.favorites
 
 import androidx.lifecycle.ViewModel
-import com.erkaslan.puplove.data.db.DogEntityDao
 import com.erkaslan.puplove.data.models.DogEntity
+import com.erkaslan.puplove.data.repository.DogBreedRepository
 import com.erkaslan.puplove.ui.home.UiEvent
 import com.erkaslan.puplove.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FavoritesViewModel @Inject constructor(private val dogEntityDao: DogEntityDao) : ViewModel() {
+class FavoritesViewModel @Inject constructor(private val dogBreedRepository: DogBreedRepository) : ViewModel() {
     private var _viewState = MutableStateFlow(DetailViewState())
     val viewState: StateFlow<DetailViewState> = _viewState
 
@@ -26,7 +26,7 @@ class FavoritesViewModel @Inject constructor(private val dogEntityDao: DogEntity
 
     private fun getFavorites() {
         CoroutineScope(Dispatchers.Default).launch {
-            val allFavorites = dogEntityDao.getAllFavorites().reversed()
+            val allFavorites = dogBreedRepository.getAllFavorites()
             _viewState.update {
                 it.copy(
                     allFavoritesList = allFavorites,
@@ -39,7 +39,7 @@ class FavoritesViewModel @Inject constructor(private val dogEntityDao: DogEntity
 
     fun unfavorite(dogEntity: DogEntity) {
         CoroutineScope(Dispatchers.IO).launch {
-            dogEntityDao.delete(dogEntity)
+            dogBreedRepository.deleteFavorite(dogEntity)
 
             val newList = viewState.value.filteredList?.toMutableList()
             newList?.remove(dogEntity)

@@ -59,8 +59,8 @@ class HomeFragment : Fragment(), DogBreedListener {
 
     private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.viewState.collect {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.viewState.collect {
                     it.dogBreedList?.let { list ->
                         if (list.isEmpty()) {
                             binding.errorText = resources.getString(R.string.error_connection)
