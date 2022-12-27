@@ -3,6 +3,7 @@ package com.erkaslan.puplove.di
 import com.erkaslan.puplove.data.db.DogEntityDao
 import com.erkaslan.puplove.data.repository.DogBreedRepository
 import com.erkaslan.puplove.data.repository.DogBreedRepositoryImpl
+import com.erkaslan.puplove.data.services.DogBreedService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +15,7 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Singleton
     @Provides
-    fun provideDogBreedRepository(dogEntityDao: DogEntityDao): DogBreedRepository {
-        return DogBreedRepositoryImpl(dogEntityDao)
+    fun provideDogBreedRepository(dogEntityDao: DogEntityDao, dogBreedService: DogBreedService): DogBreedRepository {
+        return DogBreedRepositoryImpl(dogEntityDao, dogBreedService)
     }
 }

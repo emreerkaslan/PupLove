@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.erkaslan.puplove.data.models.DogEntity
 import com.erkaslan.puplove.data.repository.DogBreedRepository
-import com.erkaslan.puplove.util.Result
 import com.erkaslan.puplove.ui.home.UiEvent
+import com.erkaslan.puplove.util.Failed
+import com.erkaslan.puplove.util.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,12 +27,12 @@ class DogBreedDetailViewModel @Inject constructor(private val dogBreedRepository
     fun getPictures(breedName: String) {
         viewModelScope.launch {
             when (val response = dogBreedRepository.getBreedPictures(breedName)) {
-                is Result.Success -> {
+                is Success -> {
                     val finalList = response.data
                     val pagedList = finalList.take(PAGE_SIZE)
                     _viewState.update { it.copy(breedAllPictureList = finalList, pagedPictureList = pagedList, lastItemIndex = pagedList.size) }
                 }
-                is Result.Failed -> {
+                is Failed -> {
                     sendUiEvent(UiEvent.ShowError(response.exception?.message ?: ""))
                     _viewState.update { it.copy(pagedPictureList = listOf()) }
                 }

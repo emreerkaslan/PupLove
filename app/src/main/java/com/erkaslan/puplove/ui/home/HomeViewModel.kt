@@ -3,12 +3,13 @@ package com.erkaslan.puplove.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.erkaslan.puplove.data.repository.DogBreedRepository
+import com.erkaslan.puplove.util.Failed
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import com.erkaslan.puplove.util.Result
+import com.erkaslan.puplove.util.Success
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,10 +24,10 @@ class HomeViewModel @Inject constructor(private val dogBreedRepository: DogBreed
     fun getBreedList() {
         viewModelScope.launch {
             when (val response = dogBreedRepository.getAllBreeds()) {
-                is Result.Success -> {
+                is Success -> {
                     _viewState.update { it.copy(dogBreedList = response.data) }
                 }
-                is Result.Failed -> {
+                is Failed -> {
                     _viewState.update { it.copy(dogBreedList = listOf()) }
                 }
             }
