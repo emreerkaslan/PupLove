@@ -41,9 +41,17 @@ class DogBreedRepositoryImpl @Inject constructor(private val dogEntityDao: DogEn
             }
         }
 
-    override suspend fun updateFavoriteStatus(entity: DogEntity) = if (entity.favorited) dogEntityDao.upsert(entity) else dogEntityDao.delete(entity)
+    override suspend fun updateFavoriteStatus(entity: DogEntity) =
+        if (entity.favorited) dogEntityDao.upsert(entity) else dogEntityDao.delete(entity)
 
-    override suspend fun getAllFavorites(): List<DogEntity> = dogEntityDao.getAllFavorites().reversed()
+    override suspend fun getAllFavorites(): Result<List<DogEntity>> {
+        val result = runCatching { dogEntityDao.getAllFavorites().reversed() }
+        return if (result.isSuccess) Success(result.getOrNull() ?: listOf()) else Failed(
+            Throwable(
+                result.exceptionOrNull()?.message
+            )
+        )
+    }
 
     override suspend fun deleteFavorite(dogEntity: DogEntity) = dogEntityDao.delete(dogEntity)
 }

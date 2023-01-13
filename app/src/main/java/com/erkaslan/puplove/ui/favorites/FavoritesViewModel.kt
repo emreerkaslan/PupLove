@@ -5,6 +5,8 @@ import com.erkaslan.puplove.data.models.DogEntity
 import com.erkaslan.puplove.data.repository.DogBreedRepository
 import com.erkaslan.puplove.ui.home.UiEvent
 import com.erkaslan.puplove.util.Constants
+import com.erkaslan.puplove.util.Failed
+import com.erkaslan.puplove.util.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,14 +28,20 @@ class FavoritesViewModel @Inject constructor(private val dogBreedRepository: Dog
 
     private fun getFavorites() {
         CoroutineScope(Dispatchers.Default).launch {
-            val allFavorites = dogBreedRepository.getAllFavorites()
-            _viewState.update {
-                it.copy(
-                    allFavoritesList = allFavorites,
-                    filteredList = allFavorites
-                )
+            when (val allFavorites = dogBreedRepository.getAllFavorites()) {
+                is Success -> {
+                    _viewState.update {
+                        it.copy(
+                            allFavoritesList = allFavorites.data,
+                            filteredList = allFavorites.data
+                        )
+                    }
+                    sendUiEvent(UiEvent.ScrollBeginningEvent)
+                }
+                is Failed -> {
+                    sendUiEvent(UiEvent.ShowError("Something went wrong while fetching favorites"))
+                }
             }
-            sendUiEvent(UiEvent.ScrollBeginningEvent)
         }
     }
 

@@ -7,6 +7,6 @@ interface DogBreedRepository {
     suspend fun getAllBreeds() : Result<List<String>>
     suspend fun getBreedPictures(breedName: String) : Result<List<DogEntity>>
     suspend fun updateFavoriteStatus(entity: DogEntity)
-    suspend fun getAllFavorites() : List<DogEntity>
+    suspend fun getAllFavorites() : Result<List<DogEntity>>
     suspend fun deleteFavorite(dogEntity: DogEntity)
 }
