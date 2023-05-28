@@ -2,6 +2,8 @@
 
 Dog Breed Wiki App
 
+Stack: Kotlin, MVVM, Hilt, Retrofit, ViewBinding, Glide, Retrofit, Flows, Coroutines
+
 * List Dog Breeds
 * Display images of specific breeds
 * Favorite specific images
